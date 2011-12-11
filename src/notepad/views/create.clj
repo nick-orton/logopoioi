@@ -1,9 +1,9 @@
-(ns notepad.views.welcome
+(ns notepad.views.create
   (:require [notepad.views.common :as common]
             [noir.content.getting-started])
   (:use [noir.core :only [defpage]]
         [hiccup.core :only [html]]))
 
-(defpage "/welcome" []
+(defpage "/create" []
          (common/layout
            [:p "Welcome to notepad"]))
