@@ -3,7 +3,16 @@
   (:use [noir.core :only [defpage]]
         [hiccup.core :only [html]]))
 
+(def page 
+  [:div
+    [:p "Enter Text Below"]
+      [:form#the_form {:action "save" :method "post"} 
+        [:textarea#the_box {:name "box" :rows 10 :cols 80}]]
+    [:div 
+     [:a#save.btn {:href "#"} "save"] " | " [:a#create.btn {:href "/create"} "create"]]])
+
 (defpage "/create" []
-         (layouts/common
-           [:p "Enter Text Below"]
-           [:textarea#the_box {:rows 10 :cols 80}]))
+  (layouts/common page))
+
+(defpage [:post "/save"] {:keys [box]}
+  (layouts/common page ))

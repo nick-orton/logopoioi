@@ -10,7 +10,13 @@ body {
   color: green;
 }
 
-a img { border: none; }
+a img {
+  border: none; }
+
+a.btn {
+  text-decoration : none; 
+  color: yellow;
+}
 
 #the_box {
   background:black;
