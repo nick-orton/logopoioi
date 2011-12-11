@@ -25,8 +25,8 @@
 
 
 (defpage [:post "/save"] {:keys [box]}
-  (let [resp (redis/with-server SERVER
-               (do
-                 (let [id (redis/incr "notepad:note:id:count")]
-                   (redis/set (str "notepad:note:" id) box) )))]
-  (layouts/common page [:div resp])))
+  (redis/with-server SERVER
+   (let [num-id (redis/incr "notepad:note:id:count")
+         str-id (str "notepad:note:" num-id)
+         resp (redis/set str-id box)]
+     (layouts/common page [:div resp num-id ]))))
