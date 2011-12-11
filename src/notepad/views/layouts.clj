@@ -1,8 +1,8 @@
-(ns notepad.views.common
+(ns notepad.views.layouts
   (:use [noir.core :only [defpartial]]
         [hiccup.page-helpers :only [include-css html5]]))
 
-(defpartial layout [& content]
+(defpartial common [& content]
             (html5
               [:head
                [:title "notepad"]
