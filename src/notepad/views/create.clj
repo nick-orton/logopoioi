@@ -14,5 +14,9 @@
 (defpage "/create" []
   (layouts/common page))
 
+(defpage "/edit/:id" {id :id}
+  (layouts/common page ))
+
+
 (defpage [:post "/save"] {:keys [box]}
   (layouts/common page ))
