@@ -4,6 +4,7 @@
   (:use [noir.core :only [defpage]]
         [noir.response :only [redirect]]
         [hiccup.page-helpers :only [javascript-tag]]
+        [clojure.string :only [split]]
         [hiccup.core :only [html]]))
 
 (defn text-area-setting [value]
@@ -26,7 +27,9 @@
     [:div 
       [:a#save.btn {:href "#"} "save"] " | " 
       [:a#create.btn {:href "/create"} "create"] " | "
-      [:a#delete.btn {:href (str "/delete/" id)} "delete"]]])
+      [:a#delete.btn {:href (str "/delete/" id)} "delete"] " | "
+      [:a#view.btn {:href (str "/view/" id)} "view"] " | "
+      [:a#list.btn {:href "/list"} "list"]]])
 
 (defn view-page [contents]
   [:div#view_area 
@@ -37,11 +40,33 @@
 
 (def SERVER {:host "127.0.0.1" :port 6379 :db 0})
 
+(defn get-first-line-from [key]
+  ((split (redis/get key) #"\n") 0))
+
+(defpage "/" []
+  (redirect "/list"))
+
+(defpage "/list" []
+  (redis/with-server SERVER
+    (let [items (split (redis/keys "notepad:note*") #" ")
+          id+titles (map (fn [key] 
+                           [(.substring key 13)
+                            (get-first-line-from key)]) 
+                     items) 
+          links (map (fn [id+title] 
+                       [:li 
+                        [:a {:href (str "/edit/" (first id+title))} 
+                            (last id+title)]])
+                     id+titles)]
+      (layouts/common [:div#stuff 
+                        [:ul#links_list links]
+                        [:a {:href "/create"} "create"]]))))
+
 (defpage "/delete/:id" {id :id}
   (redis/with-server SERVER
     (do
       (redis/del (str "notepad:note:" id))
-      (redirect "/create"))))
+      (redirect "/list"))))
 
 (defpage "/view/:id" {id :id}
   (redis/with-server SERVER
@@ -62,7 +87,7 @@
 
 (defpage [:post "/save"] {:keys [box]}
   (redis/with-server SERVER
-    (let [num-id (redis/incr "notepad:note:id:count")
+    (let [num-id (redis/incr "notepad:idctr")
           str-id (str "notepad:note:" num-id)]
       (redis/set str-id box)
       (redirect (str "/edit/" num-id)))))
