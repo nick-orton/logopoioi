@@ -8,7 +8,7 @@
                [:title "notepad"]
                (include-css "/css/reset.css")
                (include-js "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
-                           "js/notepad.js")]
+                           "/js/notepad.js")]
               [:body
                [:div#wrapper
                 content]]))
