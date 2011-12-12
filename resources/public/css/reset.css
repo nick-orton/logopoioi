@@ -2,25 +2,52 @@ html {
 	margin:0;
 	padding:0;
 	border:0;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+#view_area {
+  font-size: 20px;
 }
 
 body {
 	line-height: 1.5;
-	background: black;
-  color: green;
+	background: #000033;
+  color: #CCFF33;
 }
 
 a img {
   border: none; }
 
-a.btn {
+a {
   text-decoration : none; 
-  color: yellow;
+  color: #CCFFFF;
+}
+
+a:hover {
+  font-weight: bold;
+}
+
+li {
+ list-style-type: none;
+ font-size: 20px;
+}
+
+li a {
+  color: #CCFF33;
 }
 
 #the_box {
-  background:black;
-  color: yellow;
+  background:#000033;
+  color: #CCFF33;
+  border: 0px;
+  background: transparent;
+  font-family: monospace;
+  outline: none;
+  resize: none;
+  font-size: 18px;
+  height: 100%;
+  width: 100%;
 }
 
 

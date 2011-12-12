@@ -12,24 +12,25 @@
 
 (defn create-page []
   [:div
-    [:form#the_form {:action "/save" :method "post"} 
-      [:textarea#the_box {:name "box" :rows 10 :cols 80} ]]
     [:div 
       [:a#save.btn {:href "#"} "save"] " | " 
-      [:a#create.btn {:href "/create"} "create"]]])
+      [:a#create.btn {:href "/create"} "create"] " | "
+      [:a#list.btn {:href "/list"} "list"]]
+    [:form#the_form {:action "/save" :method "post"} 
+      [:textarea#the_box {:name "box" :rows 40 } ]] ])
 
 
 (defn edit-page [contents id]
   [:div
-    [:form#the_form {:action "/edit" :method "post"} 
-      [:textarea#the_box {:name "box" :rows 10 :cols 80} contents]
-      [:input#hidden_id {:name "id" :type "hidden" :value id}]]
     [:div 
       [:a#save.btn {:href "#"} "save"] " | " 
       [:a#create.btn {:href "/create"} "create"] " | "
       [:a#delete.btn {:href (str "/delete/" id)} "delete"] " | "
       [:a#view.btn {:href (str "/view/" id)} "view"] " | "
-      [:a#list.btn {:href "/list"} "list"]]])
+      [:a#list.btn {:href "/list"} "list"]]
+    [:form#the_form {:action "/edit" :method "post"} 
+      [:textarea#the_box {:name "box" :rows 40 } contents]
+      [:input#hidden_id {:name "id" :type "hidden" :value id}]]])
 
 (defn view-page [contents]
   [:div#view_area 
