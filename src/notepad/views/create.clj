@@ -9,25 +9,34 @@
 (defn text-area-setting [value]
   (str "set_text_area(\"" value "\");"))
 
-(defn page [contents form-action id]
+(defn edit-page [contents form-action id]
   [:div
-    [:p "Enter Text Below"]
-      [:form#the_form {:action form-action :method "post"} 
-        [:textarea#the_box {:name "box" :rows 10 :cols 80} contents]
-        [:input#hidden_id {:name "id" :type "hidden" :value id}]]
+    [:form#the_form {:action form-action :method "post"} 
+      [:textarea#the_box {:name "box" :rows 10 :cols 80} contents]
+      [:input#hidden_id {:name "id" :type "hidden" :value id}]]
     [:div 
-     [:a#save.btn {:href "#"} "save"] " | " 
-     [:a#create.btn {:href "/create"} "create"]]])
+      [:a#save.btn {:href "#"} "save"] " | " 
+      [:a#create.btn {:href "/create"} "create"]]])
+
+(defn view-page [contents]
+  [:div#view_area 
+    [:pre contents]])
 
 (defpage "/create" []
-  (layouts/common (page "" "/save" 0)))
+  (layouts/common (edit-page "" "/save" 0)))
 
 (def SERVER {:host "127.0.0.1" :port 6379 :db 0})
+
+(defpage "/view/:id" {id :id}
+  (redis/with-server SERVER
+    (let [resp (redis/get (str "notepad:note:" id))]
+      (layouts/common (view-page resp)))))
+
 
 (defpage "/edit/:id" {id :id}
   (redis/with-server SERVER
     (let [resp (redis/get (str "notepad:note:" id))]
-      (layouts/common (page resp "/edit" id)))))
+      (layouts/common (edit-page resp "/edit" id)))))
 
 (defpage [:post "/edit"] {:keys [box id]}
   (redis/with-server SERVER
