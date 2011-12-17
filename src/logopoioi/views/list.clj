@@ -1,7 +1,6 @@
 (ns logopoioi.views.list
   (:require [logopoioi.views.layouts :as layouts]
-            [logopoioi.models.logos :as note]
-            [redis.core :as redis])
+            [logopoioi.models.logos :as note])
   (:use [noir.core :only [defpage]]
         [noir.response :only [redirect]]
         [clojure.string :only [split]]))
