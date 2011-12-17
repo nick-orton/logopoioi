@@ -1,4 +1,4 @@
-(ns notepad.views.create
+(ns notepad.views.crud
   (:require [notepad.views.layouts :as layouts]
             [redis.core :as redis])
   (:use [noir.core :only [defpage]]
@@ -39,29 +39,10 @@
 (defpage "/create" []
   (layouts/common (create-page )))
 
-(def SERVER {:host "127.0.0.1" :port 6379 :db 0})
-
-(defn get-first-line-from [key]
-  ((split (redis/get key) #"\n") 0))
-
-(defpage "/" []
-  (redirect "/list"))
-
-(defpage "/list" []
-  (redis/with-server SERVER
-    (let [items (split (redis/keys "notepad:note*") #" ")
-          id+titles (map (fn [key] 
-                           [(.substring key 13)
-                            (get-first-line-from key)]) 
-                     items) 
-          links (map (fn [id+title] 
-                       [:li 
-                        [:a {:href (str "/edit/" (first id+title))} 
-                            (last id+title)]])
-                     id+titles)]
-      (layouts/common [:div#stuff 
-                        [:ul#links_list links]
-                        [:a {:href "/create"} "create"]]))))
+(def SERVER {:host "127.0.0.1" 
+             :port 6379 
+             :db 0 
+             :timeout 5000})
 
 (defpage "/delete/:id" {id :id}
   (redis/with-server SERVER
@@ -73,7 +54,6 @@
   (redis/with-server SERVER
     (let [resp (redis/get (str "notepad:note:" id))]
       (layouts/common (view-page resp)))))
-
 
 (defpage "/edit/:id" {id :id}
   (redis/with-server SERVER
