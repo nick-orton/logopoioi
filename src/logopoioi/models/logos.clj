@@ -4,9 +4,11 @@
            [org.apache.hadoop.hbase HBaseConfiguration]))
 
 
-(def TABLE-NAME "test")
-(def COLUMN-FAM "cf")
-(def LOG-COL "a")
+(def TABLE-NAME "logopoioi")
+(def COLUMN-FAM "logos")
+(def COUNTER-ROW "0")
+(def LOG-COL "log")
+(def COUNTER-COL "counter")
 
 
 (defn- get-table []
