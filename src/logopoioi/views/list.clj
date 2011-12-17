@@ -1,5 +1,5 @@
-(ns notepad.views.list
-  (:require [notepad.views.layouts :as layouts]
+(ns logopoioi.views.list
+  (:require [logopoioi.views.layouts :as layouts]
             [redis.core :as redis])
   (:use [noir.core :only [defpage]]
         [noir.response :only [redirect]]

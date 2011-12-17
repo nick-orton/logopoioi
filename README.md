@@ -1,6 +1,6 @@
-# notepad
+# logopoioi
 
-A website written in noir. 
+A paste-biny thing
 
 ## Usage
 
