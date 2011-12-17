@@ -1,5 +1,6 @@
 (ns logopoioi.models.logos
-  (:import [org.apache.hadoop.hbase.client HTable Put Get] 
+  (:use [clojure.string :only [split]])
+  (:import [org.apache.hadoop.hbase.client HTable Put Get Delete] 
            [org.apache.hadoop.hbase.util Bytes] 
            [org.apache.hadoop.hbase HBaseConfiguration]))
 
@@ -10,6 +11,16 @@
 (def LOG-COL "log")
 (def COUNTER-COL "counter")
 
+(defprotocol Note 
+  (content [self] )
+  (title [self])
+  (identifier [self]))
+
+(defn make-note [id text]
+  (reify Note
+    (content [_] text)
+    (title [_] ((split text #"\n") 0))
+    (identifier [_] id)))
 
 (defn- get-table []
   (let [config (HBaseConfiguration/create)
@@ -26,5 +37,34 @@
       (.close table)
       (Bytes/toString (.getValue (.get (.list result) 0))))))
 
+(defn- put [row-id col value]
+  (let [table (get-table)
+        put-obj (Put. (Bytes/toBytes row-id))]
+    (.add put-obj (Bytes/toBytes COLUMN-FAM) 
+          (Bytes/toBytes col) (Bytes/toBytes value))
+    (.put table put-obj)
+    (.close table)))
+
+(defn- next-log-row []
+  (let [ctr (Integer/parseInt (get-col COUNTER-ROW COUNTER-COL))]  
+    (put "0" COUNTER-COL (str (inc ctr)))
+    (str ctr)))
+
+(defn delete [note]
+  (let [table (get-table)
+        del-obj (Delete. (Bytes/toBytes (identifier note)))]
+    (.delete table del-obj)
+    (.close table)))
+
 (defn fetch [id]
-  (get-col id LOG-COL))
+  (make-note id (get-col id LOG-COL)))
+
+(defn update [note]
+  (put (identifier note) LOG-COL (content note))
+  note)
+
+(defn create [text]
+  (let [id (next-log-row)
+        note (make-note id text)]
+    (update note)
+    note))
