@@ -1,5 +1,6 @@
 (ns logopoioi.views.crud
   (:require [logopoioi.views.layouts :as layouts]
+            [logopoioi.models.logos :as note]
             [redis.core :as redis])
   (:use [noir.core :only [defpage]]
         [noir.response :only [redirect]]
@@ -39,36 +40,23 @@
 (defpage "/create" []
   (layouts/common (create-page )))
 
-(def SERVER {:host "127.0.0.1" 
-             :port 6379 
-             :db 0 
-             :timeout 5000})
-
 (defpage "/delete/:id" {id :id}
-  (redis/with-server SERVER
-    (do
-      (redis/del (str "notepad:note:" id))
-      (redirect "/list"))))
+  (note/delete (note/make-note id ""))
+  (redirect "/list"))
 
 (defpage "/view/:id" {id :id}
-  (redis/with-server SERVER
-    (let [resp (redis/get (str "notepad:note:" id))]
-      (layouts/common (view-page resp)))))
+  (let [text (note/content (note/fetch id))]
+      (layouts/common (view-page text))))
 
 (defpage "/edit/:id" {id :id}
-  (redis/with-server SERVER
-    (let [resp (redis/get (str "notepad:note:" id))]
-      (layouts/common (edit-page resp id)))))
+  (let [text (note/content (note/fetch id))]
+    (layouts/common (edit-page text id))))
 
 (defpage [:post "/edit"] {:keys [box id]}
-  (redis/with-server SERVER
-    (let [str-id (str "notepad:note:" id)]
-      (redis/set str-id box)
-      (redirect (str "/edit/" id)))))
+  (let [note (note/make-note (str id) box)]
+    (note/update note)
+    (redirect (str "/edit/" id))))
 
 (defpage [:post "/save"] {:keys [box]}
-  (redis/with-server SERVER
-    (let [num-id (redis/incr "notepad:idctr")
-          str-id (str "notepad:note:" num-id)]
-      (redis/set str-id box)
-      (redirect (str "/edit/" num-id)))))
+  (let [note  (note/create box)]
+    (redirect (str "/edit/" (note/identifier note)))))
