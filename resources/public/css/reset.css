@@ -37,6 +37,40 @@ li a {
   color: #CCFF33;
 }
 
+p#question {
+  font-size: 3em;
+  margin-left: 10px;
+}
+
+p.error_msg {
+  color: red;
+  font-size: 2em;
+  margin-left: 10px;
+}
+
+input#pwd_input {
+  font-size: 3em;
+  width: 400px;
+  margin-left:100px;
+  background: transparent;
+  color: yellow;
+  border: 0px;
+  outline: none;
+}
+
+#login_form div {
+  position: relative;
+}
+
+#login_form div #letterViewer {
+  display: none;
+  position: absolute;
+  left: 20px;
+  top: -23px;
+  width: 100px;
+  font: bold 72px Helvetica, Sans-Serif;
+}
+
 #the_box {
   background:#000033;
   color: #CCFF33;
