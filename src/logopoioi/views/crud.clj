@@ -1,6 +1,7 @@
 (ns logopoioi.views.crud
   (:require [logopoioi.views.layouts :as layouts]
-            [logopoioi.models.logos :as note])
+            [logopoioi.models.logos :as note]
+            [noir.session :as session])
   (:use [noir.core :only [defpage]]
         [noir.response :only [redirect]]
         [hiccup.page-helpers :only [javascript-tag]]
@@ -19,6 +20,12 @@
     [:form#the_form {:action "/save" :method "post"} 
       [:textarea#the_box {:name "box" :rows 40 } ]] ])
 
+(defmacro login-required [& page]
+ `(if (not (session/get :logged-in))
+   (redirect "/login")
+   (do
+     ~@page)
+  ))
 
 (defn edit-page [contents id]
   [:div
@@ -37,25 +44,30 @@
     [:pre contents]])
 
 (defpage "/create" []
-  (layouts/common (create-page )))
+  (login-required
+    (layouts/common (create-page ))))
 
 (defpage "/delete/:id" {id :id}
-  (note/delete (note/make-note id ""))
-  (redirect "/list"))
+  (login-required 
+    (note/delete (note/make-note id ""))
+    (redirect "/list")))
 
 (defpage "/view/:id" {id :id}
   (let [text (note/content (note/fetch id))]
       (layouts/common (view-page text))))
 
 (defpage "/edit/:id" {id :id}
-  (let [text (note/content (note/fetch id))]
-    (layouts/common (edit-page text id))))
+  (login-required
+    (let [text (note/content (note/fetch id))]
+      (layouts/common (edit-page text id)))))
 
 (defpage [:post "/edit"] {:keys [box id]}
-  (let [note (note/make-note (str id) box)]
-    (note/update note)
-    (redirect (str "/edit/" id))))
+  (login-required
+    (let [note (note/make-note (str id) box)]
+      (note/update note)
+      (redirect (str "/edit/" id)))))
 
 (defpage [:post "/save"] {:keys [box]}
-  (let [note  (note/create box)]
-    (redirect (str "/edit/" (note/identifier note)))))
+  (login-required
+    (let [note  (note/create box)]
+      (redirect (str "/edit/" (note/identifier note))))))
