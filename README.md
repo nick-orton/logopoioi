@@ -9,6 +9,9 @@ lein deps
 lein run
 ```
 
+## Todos
+http://note.lycurg.us/edit/12
+
 ## License
 
 Copyright (C) 2011 FIXME

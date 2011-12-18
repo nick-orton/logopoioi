@@ -28,7 +28,7 @@
     [:p#question (random-from questions)]
     [:form#login_form {:action "/login" :method "post"}
       [:div
-      [:input#pwd_input {:type "password" :name "login"}]]]])
+        [:input#pwd_input {:type "password" :name "login"}]]]])
 
 (defpage "/login" []
   (layouts/common (login-page false) ))
