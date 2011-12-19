@@ -60,7 +60,7 @@
 
 (defpage "/delete/:id" {id :id}
   (login-required 
-    (note/delete (note/make-note id ""))
+    (note/delete id)
     (redirect "/list")))
 
 (defpage "/view/:id" {id :id}
