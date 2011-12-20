@@ -11,17 +11,26 @@
 (defn text-area-setting [value]
   (str "set_text_area(\"" value "\");"))
 
+(def save-btn [:a#save.btn {:href "#"} "save"])
+(def create-btn [:a#create.btn {:href "/create"} "create"])
+(def list-btn [:a#list.btn {:href "/list"} "list"])
+(defn delete-btn [id] [:a#delete.btn {:href (str "/delete/" id)} "delete"])
+(defn view-btn [id] [:a#view.btn {:href (str "/view/" id)} "share"])
+(defn edit-btn [id] [:a#edit.btn {:href (str "/edit/" id)} "edit"])
+(def _| " | ")
+
 (defn create-page []
   [:div
     [:div 
-      [:a#save.btn {:href "#"} "save"] " | " 
-      [:a#create.btn {:href "/create"} "create"] " | "
-      [:a#list.btn {:href "/list"} "list"]]
+      save-btn _| create-btn _| list-btn ]
     [:form#the_form {:action "/save" :method "post"} 
       [:textarea#the_box {:name "box" :rows 40 } ]] ])
 
+(defn is-logged-in []
+  (session/get :logged-in))
+
 (defmacro login-required [& page]
- `(if (not (session/get :logged-in))
+ `(if (not (is-logged-in))
    (redirect "/login")
    (do
      ~@page)
@@ -30,18 +39,20 @@
 (defn edit-page [contents id]
   [:div
     [:div 
-      [:a#save.btn {:href "#"} "save"] " | " 
-      [:a#create.btn {:href "/create"} "create"] " | "
-      [:a#delete.btn {:href (str "/delete/" id)} "delete"] " | "
-      [:a#view.btn {:href (str "/view/" id)} "view"] " | "
-      [:a#list.btn {:href "/list"} "list"]]
+      save-btn _| create-btn _| (delete-btn id) _| (view-btn id) _| list-btn]
     [:form#the_form {:action "/edit" :method "post"} 
       [:textarea#the_box {:name "box" :rows 40 } contents]
       [:input#hidden_id {:name "id" :type "hidden" :value id}]]])
 
-(defn view-page [contents]
-  [:div#view_area 
-    [:pre contents]])
+(defn view-page [note]
+  (let [id (note/identifier note)
+        text (note/content note)]
+    [:div
+     (if (is-logged-in) 
+       [:div
+        save-btn _| create-btn _| (delete-btn id) _| (edit-btn id) _| list-btn])
+    [:div#view_area 
+      [:pre text]]]))
 
 (defpage "/create" []
   (login-required
@@ -49,12 +60,12 @@
 
 (defpage "/delete/:id" {id :id}
   (login-required 
-    (note/delete (note/make-note id ""))
+    (note/delete id)
     (redirect "/list")))
 
 (defpage "/view/:id" {id :id}
-  (let [text (note/content (note/fetch id))]
-      (layouts/common (view-page text))))
+  (let [note (note/fetch id)]
+      (layouts/common (view-page note))))
 
 (defpage "/edit/:id" {id :id}
   (login-required
