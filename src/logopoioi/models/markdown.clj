@@ -1,3 +1,6 @@
+; Stolen from Brian Carper:
+;   http://briancarper.net/blog/415/clojure-and-markdown-and-javascript-and-java-and
+;
 (ns logopoioi.markdown
   (:import (org.mozilla.javascript Context ScriptableObject)))
 
