@@ -6,6 +6,8 @@
             (html5
               [:head
                [:title "logopoioi"]
+               [:link {:href "/img/favicon.ico" :rel "icon" 
+                       :type "image/x-icon"}]
                (include-css "/css/reset.css")
                (include-js "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
                            "/js/logopoioi.js")]
