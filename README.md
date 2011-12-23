@@ -10,7 +10,7 @@ lein run
 ```
 
 ## Todos
-http://note.lycurg.us/view/12
+http://note.lycurg.us/view/14
 
 ## License
 
