@@ -4,11 +4,11 @@
 (ns logopoioi.models.markdown
   (:import (org.mozilla.javascript Context ScriptableObject)))
 
-(defn markdown-to-html [txt]
+(defn md->html [txt]
   (let [cx (Context/enter)
         scope (.initStandardObjects cx)
         input (Context/javaToJS txt scope)
-        script (str (slurp "js/showdown.js")
+        script (str (slurp "src/js/showdown.js")
                            "new Showdown.converter().makeHtml(input);")]
     (try
       (ScriptableObject/putProperty scope "input" input)

@@ -1,6 +1,7 @@
 (ns logopoioi.views.crud
   (:require [logopoioi.views.layouts :as layouts]
             [logopoioi.models.logos :as note]
+            [logopoioi.models.markdown :as markdown]
             [noir.session :as session])
   (:use [noir.core :only [defpage]]
         [noir.response :only [redirect]]
@@ -52,7 +53,7 @@
        [:div
         save-btn _| create-btn _| (delete-btn id) _| (edit-btn id) _| list-btn])
     [:div#view_area 
-      [:pre text]]]))
+      (markdown/md->html text)]]))
 
 (defpage "/create" []
   (login-required
