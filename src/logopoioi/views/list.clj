@@ -14,7 +14,7 @@
     (let [notes (note/all-notes)
           links (map (fn [note] 
                        [:li 
-                         [:a {:href (str "/edit/" (note/identifier note))} 
+                         [:a {:href (str "/view/" (note/identifier note))} 
                            (note/title note)]])
                        notes)]
         (layouts/common [:div#stuff 
