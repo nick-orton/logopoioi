@@ -11,12 +11,14 @@
 (defprotocol Note 
   (content [self] )
   (title [self])
+  (bangtags [self])
   (identifier [self]))
 
 (defn make-note [id text]
   (reify Note
     (content [_] text)
     (title [_] ((split text #"\n") 0))
+    (bangtags [_] ["bang" "tags" "yo"])
     (identifier [_] id)))
 
 (defn- next-log-row []

@@ -59,7 +59,7 @@
      (if (is-logged-in) 
        [:div
         save-btn _| create-btn _| (delete-btn id) _| (edit-btn id) _| list-btn _||
-         (render-bangtags ["bangtags" "go" "here"])
+         (render-bangtags (note/bangtags note))
                  ])
     [:div#markdown_rendered_content 
       (markdown/md->html text)]]))
