@@ -6,8 +6,12 @@ html {
   font-size: 13px;
 }
 
-#view_area {
-  font-size: 20px;
+#markdown_rendered_content {
+  font-size: 1.2em;
+}
+
+#markdown_rendered_content a {
+  color: orange;
 }
 
 body {

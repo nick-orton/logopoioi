@@ -52,7 +52,7 @@
      (if (is-logged-in) 
        [:div
         save-btn _| create-btn _| (delete-btn id) _| (edit-btn id) _| list-btn])
-    [:div#view_area 
+    [:div#markdown_rendered_content 
       (markdown/md->html text)]]))
 
 (defpage "/create" []
