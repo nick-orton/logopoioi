@@ -19,6 +19,12 @@
 (defn view-btn [id] [:a#view.btn {:href (str "/view/" id)} "share"])
 (defn edit-btn [id] [:a#edit.btn {:href (str "/edit/" id)} "edit"])
 (def _| " | ")
+(def _|| " || ")
+
+(defn render-bangtags [bangtags]
+  (let [links (map (fn [link] [:a {:href (str "/bangtag/" link)} link]) 
+                   bangtags)]
+  [:span#bang_tags (interpose _| links)]))
 
 (defn create-page []
   [:div
@@ -45,13 +51,16 @@
       [:textarea#the_box {:name "box" :rows 40 } contents]
       [:input#hidden_id {:name "id" :type "hidden" :value id}]]])
 
+
 (defn view-page [note]
   (let [id (note/identifier note)
         text (note/content note)]
     [:div
      (if (is-logged-in) 
        [:div
-        save-btn _| create-btn _| (delete-btn id) _| (edit-btn id) _| list-btn])
+        save-btn _| create-btn _| (delete-btn id) _| (edit-btn id) _| list-btn _||
+         (render-bangtags ["bangtags" "go" "here"])
+                 ])
     [:div#markdown_rendered_content 
       (markdown/md->html text)]]))
 
