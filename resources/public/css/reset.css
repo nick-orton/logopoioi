@@ -98,4 +98,6 @@ input#pwd_input {
   width: 100%;
 }
 
-
+#bang_tags a {
+  color: orange;
+}

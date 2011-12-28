@@ -9,14 +9,24 @@
 (defpage "/" []
   (redirect "/list"))
 
+(defn note->link [note] 
+   [:li.menu_list 
+     [:a {:href (str "/view/" (note/identifier note))} 
+         (note/title note)]])
+
 (defpage "/list" []
   (login-required       
     (let [notes (note/all-notes)
-          links (map (fn [note] 
-                       [:li.menu_list 
-                         [:a {:href (str "/view/" (note/identifier note))} 
-                           (note/title note)]])
-                       notes)]
+          links (map note->link notes)]
         (layouts/common [:div#stuff 
                           [:ul#links_list links]
                           [:a {:href "/create"} "create"]]))))
+
+(defpage "/bangtag/:tag" {tag :tag} 
+  (login-required
+    (let [notes (note/notes-for tag)
+          links (map note->link notes)]
+      (layouts/common [:div#stuff
+                       [:h1 (str "Notes Tagged !" tag)]
+                       [:ul#links_list links]
+                       [:a {:href "/create"} "create"]]))))

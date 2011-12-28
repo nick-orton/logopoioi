@@ -47,6 +47,12 @@
        (filter-out-counter)
        (map result->note)))
 
+(defn has-tag? [note tag]
+  (some #(= % (str "!" tag)) (bangtags note)) )
+
+(defn notes-for [tag]
+  (filter #(has-tag? % tag) (all-notes)))
+
 (defn delete [id]
   (hbase/del-row id))
 

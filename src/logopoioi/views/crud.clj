@@ -22,9 +22,11 @@
 (def _|| " || ")
 
 (defn render-bangtags [bangtags]
-  (let [links (map (fn [link] [:a {:href (str "/bangtag/" link)} link]) 
+  (let [links (map (fn [link] [:a {:href (str "/bangtag/" 
+                                              (.substring link 1))} link]) 
                    bangtags)]
-  [:span#bang_tags (interpose _| links)]))
+  (if (not (empty? links))  
+    [:span#bang_tags " > " (interpose " " links)])))
 
 (defn create-page []
   [:div
@@ -58,7 +60,7 @@
     [:div
      (if (is-logged-in) 
        [:div
-        save-btn _| create-btn _| (delete-btn id) _| (edit-btn id) _| list-btn _||
+        save-btn _| create-btn _| (delete-btn id) _| (edit-btn id) _| list-btn 
          (render-bangtags (note/bangtags note))
                  ])
     [:div#markdown_rendered_content 
