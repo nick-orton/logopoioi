@@ -28,7 +28,7 @@ a:hover {
   font-weight: bold;
 }
 
-li {
+li.menu_list {
  list-style-type: none;
  font-size: 20px;
 }

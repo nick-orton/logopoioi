@@ -13,7 +13,7 @@
   (login-required       
     (let [notes (note/all-notes)
           links (map (fn [note] 
-                       [:li 
+                       [:li.menu_list 
                          [:a {:href (str "/view/" (note/identifier note))} 
                            (note/title note)]])
                        notes)]
