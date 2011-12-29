@@ -14,7 +14,7 @@
   (bangtags [self])
   (identifier [self]))
 
-(defn text->!tags [text]
+(defn- text->!tags [text]
   (re-seq #"!\w*" text))
 
 (defn make-note [id text]

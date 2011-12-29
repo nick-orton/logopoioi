@@ -18,9 +18,27 @@
   (login-required       
     (let [notes (note/all-notes)
           links (map note->link notes)]
-        (layouts/common [:div#stuff 
+      (layouts/common [:div#stuff 
                           [:ul#links_list links]
-                          [:a {:href "/create"} "create"]]))))
+                          [:a {:href "/create"} "create"]
+                          [:div#tag_cloud ]]))))
+
+(defn tags->bag [tags]
+  (reduce 
+    (fn [bag tag]
+      (let [cur (get bag tag)
+            cur' (if (nil? cur) 0 cur)]
+        (assoc bag tag (inc cur')))) {} tags))
+
+(defn- all-tags []
+  (->> (note/all-notes)
+       (map note/bangtags)
+       (filter #(not (nil? %)))
+       (flatten)
+       (tags->bag)))
+
+(defpage "/all_tags" []
+  (layouts/json (all-tags)))
 
 (defpage "/bangtag/:tag" {tag :tag} 
   (login-required

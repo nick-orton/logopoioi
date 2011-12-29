@@ -1,5 +1,6 @@
 (ns logopoioi.views.layouts
   (:use [noir.core :only [defpartial]]
+        [clojure.data.json :only (json-str write-json read-json)]
         [hiccup.page-helpers :only [include-js include-css html5]]))
 
 (defpartial common [& content]
@@ -14,3 +15,6 @@
               [:body
                [:div#wrapper
                 content]]))
+
+(defpartial json [& content]
+  (json-str content))
