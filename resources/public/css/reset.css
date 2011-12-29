@@ -102,7 +102,11 @@ input#pwd_input {
   color: orange;
 }
 
-#tag_cloud a {
+#tag_cloud {
   margin-top: 20px;
+}
+
+#tag_cloud a {
   color: orange;
+  margin: 5px;
 }
