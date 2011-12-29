@@ -101,3 +101,8 @@ input#pwd_input {
 #bang_tags a {
   color: orange;
 }
+
+#tag_cloud a {
+  margin-top: 20px;
+  color: orange;
+}
