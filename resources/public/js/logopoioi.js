@@ -9,8 +9,11 @@ function addTagCloud(){
   if(tc_div.length !=0){
     $.getJSON('/all_tags', function(data){
       $.each(data[0], function(k,v){
-        console.log(k,v); 
-        tc_div.append("<a class='bangtag_link' href='/bangtag/"+k.substring(1,k.length)+"'>" + k + "</a>");
+        var link = $("<a />");
+        link.attr("href", '/bangtag/'+k.substring(1,k.length));
+        link.text(k);
+        link.addClass("bangtag_link");
+        tc_div.append(link);
       });
     });
   }
