@@ -26,9 +26,7 @@ $(document).ready(function(){
   $("#save").click(function(event){
     $("#the_form").submit();      
   });
-
   addTagCloud();
-
 });
 
 

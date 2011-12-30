@@ -18,7 +18,7 @@
   (login-required       
     (let [notes (note/all-notes)
           links (map note->link notes)]
-      (layouts/common [:div#stuff 
+      (layouts/common "all notes" [:div#stuff 
                           [:ul#links_list links]
                           [:a {:href "/create"} "create"]
                           [:div#tag_cloud ]]))))
@@ -44,7 +44,8 @@
   (login-required
     (let [notes (note/notes-for tag)
           links (map note->link notes)]
-      (layouts/common [:div#stuff
-                       [:h1 (str "Notes Tagged !" tag)]
-                       [:ul#links_list links]
-                       [:a {:href "/create"} "create"]]))))
+      (layouts/common (str "notes for" tag ) 
+        [:div#stuff
+          [:h1 (str "Notes Tagged !" tag)]
+          [:ul#links_list links]
+          [:a {:href "/create"} "create"]]))))

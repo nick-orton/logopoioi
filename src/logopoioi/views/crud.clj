@@ -68,7 +68,7 @@
 
 (defpage "/create" []
   (login-required
-    (layouts/common (create-page ))))
+    (layouts/common "New Note" (create-page ))))
 
 (defpage "/delete/:id" {id :id}
   (login-required 
@@ -77,12 +77,13 @@
 
 (defpage "/view/:id" {id :id}
   (let [note (note/fetch id)]
-      (layouts/common (view-page note))))
+      (layouts/common (note/title note) ( view-page note))))
 
 (defpage "/edit/:id" {id :id}
   (login-required
-    (let [text (note/content (note/fetch id))]
-      (layouts/common (edit-page text id)))))
+    (let [note (note/fetch id)
+          text (note/content note)]
+      (layouts/common (note/title note) (edit-page text id)))))
 
 (defpage [:post "/edit"] {:keys [box id]}
   (login-required

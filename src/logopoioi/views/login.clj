@@ -31,7 +31,7 @@
         [:input#pwd_input {:type "password" :name "login"}]]]])
 
 (defpage "/login" []
-  (layouts/common (login-page false) ))
+  (layouts/common "login" (login-page false) ))
 
 (defpage [:post "/login"] {:keys [login]}
   (let [pwd (System/getenv "LOGOPOIOI_PWD")]
@@ -39,8 +39,8 @@
       (do
         (session/put! :logged-in true)
         (redirect "/list"))
-      (layouts/common (login-page true)))))
+      (layouts/common "login failed" (login-page true)))))
 
 (defpage "/logout" []
   (session/remove! :logged-in)
-  (layouts/common (login-page false)))
+  (layouts/common "logged out" (login-page false)))
